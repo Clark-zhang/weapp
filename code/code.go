@@ -2,6 +2,7 @@
 package code
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -46,12 +47,17 @@ type Color struct {
 //
 // @token 微信access_token
 func (code QRCoder) AppCode(token string) (*http.Response, error) {
-	body, err := json.Marshal(code)
+	// body, err := json.Marshal(code)
+
+	buff := new(bytes.Buffer)
+	enc := json.NewEncoder(buff)
+	enc.SetEscapeHTML(false)
+	err := enc.Encode(code)
 	if err != nil {
 		return nil, err
 	}
 
-	return fetchCode(appCodeAPI, string(body), token)
+	return fetchCode(appCodeAPI, string(buff.String()), token)
 }
 
 // UnlimitedAppCode 获取小程序码
@@ -60,13 +66,17 @@ func (code QRCoder) AppCode(token string) (*http.Response, error) {
 //
 // @token 微信access_token
 func (code QRCoder) UnlimitedAppCode(token string) (*http.Response, error) {
+	// body, err := json.Marshal(code)
 
-	body, err := json.Marshal(code)
+	buff := new(bytes.Buffer)
+	enc := json.NewEncoder(buff)
+	enc.SetEscapeHTML(false)
+	err := enc.Encode(code)
 	if err != nil {
 		return nil, err
 	}
 
-	return fetchCode(unlimitedAppCodeAPI, string(body), token)
+	return fetchCode(unlimitedAppCodeAPI, string(buff.String()), token)
 }
 
 // QRCode 获取小程序二维码
@@ -75,12 +85,17 @@ func (code QRCoder) UnlimitedAppCode(token string) (*http.Response, error) {
 // @token 微信access_token
 func (code QRCoder) QRCode(token string) (*http.Response, error) {
 
-	body, err := json.Marshal(code)
+	// body, err := json.Marshal(code)
+
+	buff := new(bytes.Buffer)
+	enc := json.NewEncoder(buff)
+	enc.SetEscapeHTML(false)
+	err := enc.Encode(code)
 	if err != nil {
 		return nil, err
 	}
 
-	return fetchCode(QRCodeAPI, string(body), token)
+	return fetchCode(QRCodeAPI, string(buff.String()), token)
 }
 
 // 向微信服务器获取二维码
